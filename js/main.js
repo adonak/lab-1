@@ -8,7 +8,7 @@ function createMap(){
     //create the map
     mapUsaPrecip = L.map('mapUsaPrecip', {
         center: [39.50, -98.35],
-        zoom: 5
+        zoom: 4
     });
 
     //add base tilelayer
@@ -163,6 +163,9 @@ function createSequenceControls(attributes){
 
             // pass new attribute to update symbols
             updatePropSymbols(attributes[index]);
+
+            // update legend as well
+            updateLegend(attributes[index]);
         })
 
     })
@@ -172,6 +175,8 @@ function createSequenceControls(attributes){
         var index = this.value;
         // pass new attribute to update symbols
         updatePropSymbols(attributes[index]);
+        // update legend as well
+        updateLegend(attributes[index]);  
     });
 };
 
@@ -217,7 +222,7 @@ function updatePropSymbols(attribute){
 
 function LegendContent(attribute){
     this.year = attribute.split("_")[1];
-    this.formatted = "<t><b>Annual Precipitation in " + this.year + "</b></t>";
+    this.formatted = '<p class="legend-content"><b>Annual Precipitation in <span class="year">2015</span></b></p>';
 };
 
 // create legend
@@ -231,18 +236,21 @@ function createLegend(attributes){
             // create the control container with a particular class name
             var container = L.DomUtil.create('div', 'legend-container');
 
-            //create new popup content
-            // var legendContent = new LegendContent(feature.properties, attribute);
             var attribute = attributes[0]
             legendContent = new LegendContent(attribute)
 
-            container.insertAdjacentHTML('beforeend', legendContent.formatted);
+            container.innerHTML= '<p class="legend-content"><b>Annual Precipitation in <span class="year">2015</span></b></p>';
 
             return container;
         }
     });
-
     mapUsaPrecip.addControl(new LegendControl());
+};
+
+function updateLegend(attribute){
+    var year = attribute.split("_")[1];
+    // update legend
+    document.querySelector("span.year").innerHTML = year;
 };
 
 

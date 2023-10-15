@@ -2,7 +2,7 @@
 
 #mapUsaPrecip {
     margin: auto;
-    height: 650px;
+    height: 450px;
     width: 100%;
     display: inline-block;
     /* display: inline-block; */
@@ -54,6 +54,6 @@
     border: solid gray 1px;  
 }
 
-/* .legend-content p {
+.legend-content  {
     margin: 0.2em 0;
-} */
+}
