@@ -44,15 +44,15 @@
     float: left;  
 }
 
-.legend-container {  
-    width: 250px;  
-    height: 20px;  
-    background-color: rgba(255,255,255,0.8);  
+/* .legend-container {  
+    width: 130px;  
+    height: 130px;  
+    background-color: #ffffffcc;  
     padding: 10px;  
     line-height: 20px;  
     text-align: center;  
     border: solid gray 1px;  
-}
+} */
 
 .legend-content  {
     margin: 0.2em 0;

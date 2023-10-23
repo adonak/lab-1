@@ -1,6 +1,7 @@
 //declare map variable globally so all functions have access
 var mapUsaPrecip;
 var minValue;
+var dataStats = {};
 
 //create map
 function createMap(){
@@ -19,6 +20,19 @@ function createMap(){
 	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	ext: 'png'
 	}).addTo(mapUsaPrecip);
+
+    // Add the geocoder control
+    L.Control.geocoder({
+        geocoder: L.Control.Geocoder.nominatim(),
+        defaultMarkGeocode: false,
+        placeholder: "Search for a location...",
+        collapsed: false, // Set to true if you want it to be initially collapsed
+    }).on('markgeocode', function (e) {
+        // This function is called when a location is selected
+        var latlng = e.geocode.center;
+        var zoom = 12; // You can set your desired zoom level
+        mapUsaPrecip.setView(latlng, zoom);
+    }).addTo(mapUsaPrecip);
 
     //call getData function
     getData(mapUsaPrecip);
@@ -41,6 +55,27 @@ function calculateMinValue(data){
 
     return minValue;
 }
+
+function calcStats(data){
+    //create empty array to store all data values
+    var allValues = [];
+    //loop through each weather station
+    for(var NAME of data.features){
+        //loop through each year
+        for(var year = 2015; year <= 2022; year+=1){
+              //get population for current year
+              var value = NAME.properties["PRCP_"+ String(year)];
+              //add value to array
+              allValues.push(value);
+        }
+    }
+    //get min, max, mean stats for our array
+    dataStats.min = Math.min(...allValues);
+    dataStats.max = Math.max(...allValues);
+    //calculate meanValue
+    var sum = allValues.reduce(function(a, b){return a+b;});
+    dataStats.mean = sum/ allValues.length;
+}    
 
 //calculate radius of each proportional symbol
 function calcPropRadius(attValue) {
@@ -236,14 +271,40 @@ function createLegend(attributes){
             // create the control container with a particular class name
             var container = L.DomUtil.create('div', 'legend-container');
 
-            var attribute = attributes[0]
-            legendContent = new LegendContent(attribute)
+            container.innerHTML = '<p class="legend-content">Annual Precipitation in <span class="year">2015</span></p>';
 
-            container.innerHTML= '<p class="legend-content"><b>Annual Precipitation in <span class="year">2015</span></b></p>';
+            //start attribute legend svg string
+            var svg = '<svg id="attribute-legend" width="130px" height="130px">';
+
+            //array of circle names to base loop on
+            var circles = ["max", "mean", "min"];
+
+            //loop to add each circle and text to svg string
+            for (var i=0; i<circles.length; i++){
+                //Step 3: assign the r and cy attributes  
+                var radius = calcPropRadius(dataStats[circles[i]]);  
+                var cy = 130 - radius;  
+    
+                //circle string  
+                svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="65"/>';
+                
+                //evenly space out labels            
+                var textY = i * 20 + 20;            
+
+                //text string            
+                svg += '<text id="' + circles[i] + '-text" x="65" y="' + textY + '">' + Math.round(dataStats[circles[i]]*100)/100 + " inches" + '</text>';
+        };
+
+            //close svg string
+            svg += "</svg>";
+
+            //add attribute legend svg to container
+            container.insertAdjacentHTML('beforeend',svg);
 
             return container;
         }
     });
+
     mapUsaPrecip.addControl(new LegendControl());
 };
 
@@ -266,6 +327,8 @@ function getData(){
             var attributes = processData(json);
             //calculate minimum data value
             minValue = calculateMinValue(json);
+            //calculate stats
+            calcStats(json);
             //call function to create proportional symbols
             createPropSymbols(json, attributes);
             // call function to create legend
