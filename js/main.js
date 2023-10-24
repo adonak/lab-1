@@ -13,13 +13,8 @@ function createMap(){
     });
 
     //add base tilelayer
-    // uses Stadia AlidadeSmooth map
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
-	minZoom: 0,
-	maxZoom: 20,
-	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	ext: 'png'
-	}).addTo(mapUsaPrecip);
+    // uses Stadia AlidadeSmooth map in Leaflet Providers plug-in
+    L.tileLayer.provider('Stadia.AlidadeSmooth').addTo(mapUsaPrecip);
 
     // Add the geocoder control
     L.Control.geocoder({
@@ -271,10 +266,10 @@ function createLegend(attributes){
             // create the control container with a particular class name
             var container = L.DomUtil.create('div', 'legend-container');
 
-            container.innerHTML = '<p class="legend-content">Annual Precipitation in <span class="year">2015</span></p>';
+            container.innerHTML = '<p class="legend-content"><b>Annual Precipitation in <span class="year">2015</span></b></p>';
 
             //start attribute legend svg string
-            var svg = '<svg id="attribute-legend" width="130px" height="130px">';
+            var svg = '<svg id="attribute-legend" width="160px" height="71px">';
 
             //array of circle names to base loop on
             var circles = ["max", "mean", "min"];
@@ -283,16 +278,16 @@ function createLegend(attributes){
             for (var i=0; i<circles.length; i++){
                 //Step 3: assign the r and cy attributes  
                 var radius = calcPropRadius(dataStats[circles[i]]);  
-                var cy = 130 - radius;  
+                var cy = 70 - radius;  
     
                 //circle string  
-                svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="65"/>';
+                svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="35"/>';
                 
                 //evenly space out labels            
                 var textY = i * 20 + 20;            
 
                 //text string            
-                svg += '<text id="' + circles[i] + '-text" x="65" y="' + textY + '">' + Math.round(dataStats[circles[i]]*100)/100 + " inches" + '</text>';
+                svg += '<text id="' + circles[i] + '-text" x="80" y="' + textY + '">' + Math.round(dataStats[circles[i]]*100)/100 + " inches" + '</text>';
         };
 
             //close svg string

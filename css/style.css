@@ -1,17 +1,75 @@
 /*Add CSS styles here*/
 
-#mapUsaPrecip {
-    margin: auto;
-    height: 450px;
-    width: 100%;
-    display: inline-block;
-    /* display: inline-block; */
-
-    .leaflet-popup-content p {
-        margin: 0.2em 0;
-    }
+/* Apply general styles to the body and page content */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    line-height: 1.5;
 }
 
+/* Style the title */
+#title {
+    background-color: #7da2a9;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+h1 {
+    font-size: 28px;
+    margin: 0;
+    color: #003366;
+}
+
+/* Style the description */
+#description {
+    margin: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    color: #003366;
+    font-size: 18px;
+}
+
+/* Add spacing between paragraphs */
+#description p {
+    margin: 6px 0;
+}
+
+/* Style the map container */
+#mapUsaPrecip {
+    width: 80%;
+    height: 550px; /* Adjust the height as needed */
+    margin: 20px auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style the footer */
+footer {
+    text-align: center;
+    background-color: #7da2a9;
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Add spacing between paragraphs */
+/* #footer p {
+    margin: 0 0;
+    line-height: 0;
+} */
+
+
+/* Style email links */
+a[href^="mailto:"] {
+    color: #4942af;
+    text-decoration: none;
+}
 
 .sequence-control-container {  
     width: 350px;  
@@ -44,15 +102,12 @@
     float: left;  
 }
 
-/* .legend-container {  
-    width: 130px;  
-    height: 130px;  
+.legend-container {  
     background-color: #ffffffcc;  
-    padding: 10px;  
-    line-height: 20px;  
-    text-align: center;  
+    padding: 8px;  
+    line-height: 15px;  
     border: solid gray 1px;  
-} */
+}
 
 .legend-content  {
     margin: 0.2em 0;
